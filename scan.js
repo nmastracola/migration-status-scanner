@@ -10,7 +10,7 @@ const csvOutput = "scan-output"
 const moment = require('moment')
 const { ConcurrencyManager } = require('axios-concurrency')
 
-const MAX_CONCURRENT_REQUESTS = 5
+const MAX_CONCURRENT_REQUESTS = 3
 const manager = ConcurrencyManager(axios, MAX_CONCURRENT_REQUESTS)
 const baseUrl = ".instructure.com/api/v1/courses/sis_course_id:"
 const ext = ".csv"
@@ -30,6 +30,7 @@ function listMigrations (answers, baseUrl, course) {
           }
         })
         .then(res => {
+          console.log(chalk.red(`scanned ${course.sis_id}`))
           return res.data} )
         .catch(e => console.error(e))
 }
@@ -38,6 +39,7 @@ async function issueCheck (response, courseData) {
   courseData.imports = response.map(async (response) => {
     description = await getDesc(response)
     .then(result => {
+      console.log(chalk.yellow(`checking ${response.id}`))
       return result
     })
     return {
