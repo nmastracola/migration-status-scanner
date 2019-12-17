@@ -22,6 +22,7 @@ const filteredList = fileList.filter(file => {
 })
 
 function listMigrations (answers, baseUrl, course) {
+  course.sis_id = encodeURIComponent(course.sis_id)
   return axios
         .get(`https://${answers.domain}${baseUrl}${course.sis_id}/content_migrations`, {
           headers: {
